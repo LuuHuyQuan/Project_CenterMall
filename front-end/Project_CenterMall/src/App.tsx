@@ -1,13 +1,28 @@
-import { Button } from "./components/ui/button"
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { UserLayout } from './components/layout/UserLayout';
+import { HomePage } from './pages/user/HomePage';
+import { StoresPage } from './pages/user/StoresPage';
+import { StoreDetailPage } from './pages/user/StoreDetailPage';
+import { EventsPage } from './pages/user/EventsPage';
+import { AboutPage } from './pages/user/AboutPage';
+import { ContactPage } from './pages/user/ContactPage';
 
 function App() {
   return (
-    <>
-      <div className="flex min-h-svh flex-col items-center justify-center">
-        <Button>Click me</Button>
-      </div>
-    </>
-  )
+    <BrowserRouter>
+      <Routes>
+        {/* User Routes */}
+        <Route element={<UserLayout />}>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/stores" element={<StoresPage />} />
+          <Route path="/stores/:id" element={<StoreDetailPage />} />
+          <Route path="/events" element={<EventsPage />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/contact" element={<ContactPage />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
-export default App
+export default App;
