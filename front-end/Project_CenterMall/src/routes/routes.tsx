@@ -1,24 +1,41 @@
+import { Suspense } from 'react';
 import { Routes, Route } from 'react-router-dom';
-import { UserLayout } from '../components/layout/UserLayout';
-import { HomePage } from '../pages/user/HomePage';
-import { StoresPage } from '../pages/user/StoresPage';
-import { StoreDetailPage } from '../pages/user/StoreDetailPage';
-import { EventsPage } from '../pages/user/EventsPage';
-import { AboutPage } from '../pages/user/AboutPage';
-import { ContactPage } from '../pages/user/ContactPage';
+import { UserRoutes } from './userRoutes';
+import { AdminRoutes } from './adminRoutes';
+import { NotFoundPage } from '../pages/NotFoundPage';
 
+/**
+ * Loading Fallback Component
+ * Displayed while lazy-loaded components are being fetched
+ */
+function LoadingFallback() {
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="text-center">
+        <div className="inline-block w-16 h-16 border-4 border-violet-200 border-t-violet-600 rounded-full animate-spin mb-4" />
+        <p className="text-gray-600">Đang tải...</p>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * Main Application Routes
+ * Combines all route modules with proper error and loading handling
+ */
 export function AppRoutes() {
   return (
-    <Routes>
-      {/* User Routes */}
-      <Route element={<UserLayout />}>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/stores" element={<StoresPage />} />
-        <Route path="/stores/:id" element={<StoreDetailPage />} />
-        <Route path="/events" element={<EventsPage />} />
-        <Route path="/about" element={<AboutPage />} />
-        <Route path="/contact" element={<ContactPage />} />
-      </Route>
-    </Routes>
+    <Suspense fallback={<LoadingFallback />}>
+      <Routes>
+        {/* User Routes - Public */}
+        {UserRoutes()}
+
+        {/* Admin Routes - Protected */}
+        {AdminRoutes()}
+
+        {/* 404 Not Found - Catch all unmatched routes */}
+        <Route path="*" element={<NotFoundPage />} />
+      </Routes>
+    </Suspense>
   );
 }
